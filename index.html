@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>信息图：1850年英国农民的收入</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- 
+    Infographic Plan Summary:
+    Narrative Structure: The infographic follows the source document's structure, first defining the three classes of "farmer," then analyzing the income and economic conditions of each (Agricultural Labourer, Tenant Farmer, Yeoman Farmer), followed by a section on the cost of living to provide context, and concluding with a summary of the findings.
+    Color Palette Selection: "Energetic & Playful" (#00A8E8, #007EA7, #003459, #FFFFFF, #2D3142) was chosen for its high contrast and vibrant feel to make the historical data engaging and accessible.
+    SVG/Mermaid JS Confirmation: NEITHER Mermaid JS NOR SVG were used in this output. All diagrams are built with structured HTML and Tailwind CSS. All charts are rendered on HTML Canvas elements via Chart.js.
+    
+    Visualization Choices:
+    1.  Data: The three farmer classes. Goal: Organize. Visualization: HTML/CSS Flow Diagram. Justification: Clearly illustrates the social hierarchy and separates the groups without using SVG/Mermaid. Library/Method: HTML/CSS with Tailwind. NO SVG.
+    2.  Data: Labourer's annual income. Goal: Inform. Visualization: Single Big Number. Justification: Provides an immediate, high-impact takeaway. Library/Method: Styled HTML. NO SVG.
+    3.  Data: Labourer's regional wage disparity. Goal: Compare. Visualization: Bar Chart. Justification: Best for comparing discrete values across categories (regions). Library/Method: Chart.js/Canvas. NO SVG.
+    4.  Data: Labourer's weekly budget. Goal: Show Composition. Visualization: Donut Chart. Justification: Excellent for showing parts of a whole, highlighting the dominance of essential costs. Library/Method: Chart.js/Canvas. NO SVG.
+    5.  Data: Tenant Farmer's income volatility. Goal: Compare. Visualization: Bar Chart with negative values. Justification: Effectively shows the dramatic swings between profit and loss. Library/Method: Chart.js/Canvas. NO SVG.
+    6.  Data: The hierarchy of rural society. Goal: Organize. Visualization: Pyramid Diagram. Justification: A classic infographic element to show hierarchical relationships, built with styled HTML. Library/Method: HTML/CSS with Tailwind. NO SVG.
+    7.  Data: Cost of shoes vs. weekly wage. Goal: Compare. Visualization: Pictograph. Justification: Makes an abstract comparison tangible and memorable using Unicode characters. Library/Method: Unicode in HTML. NO SVG.
+    -->
+
+    <style>
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background-color: #f0f4f8;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        .text-shadow {
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+        .card {
+            background-color: #ffffff;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .pyramid-level {
+            clip-path: polygon(10% 0, 90% 0, 100% 100%, 0% 100%);
+        }
+    </style>
+</head>
+<body class="text-[#2D3142]">
+
+    <div class="container mx-auto p-4 sm:p-8">
+        <header class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-bold text-[#003459] mb-2 text-shadow">田野的财富</h1>
+            <p class="text-xl md:text-2xl text-[#007EA7]">解构1850年英国农民的年收入</p>
+        </header>
+
+        <section class="mb-16">
+            <div class="text-center max-w-3xl mx-auto mb-10">
+                <h2 class="text-3xl font-bold text-[#003459] mb-4">“农民”究竟是谁？</h2>
+                <p class="text-lg text-gray-600">在1850年的英国，“农民”并非一个单一群体。要理解他们的收入，必须首先区分构成乡村社会的三大阶级，他们的经济地位与收入来源截然不同。</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                <div class="card p-6">
+                    <div class="text-6xl mb-4">👨‍🌾</div>
+                    <h3 class="text-2xl font-bold text-[#007EA7] mb-2">农业雇工</h3>
+                    <p class="text-gray-600">构成乡村人口的绝大多数，是无地的工资收入者。他们的收入是为生存而出卖的劳动力。</p>
+                </div>
+                <div class="card p-6">
+                    <div class="text-6xl mb-4">📈</div>
+                    <h3 class="text-2xl font-bold text-[#007EA7] mb-2">租佃农场主</h3>
+                    <p class="text-gray-600">乡村的企业家和资本家，通过租赁土地、投入资本和雇佣劳动力来追求商业利润。</p>
+                </div>
+                <div class="card p-6">
+                    <div class="text-6xl mb-4">🏠</div>
+                    <h3 class="text-2xl font-bold text-[#007EA7] mb-2">自耕农</h3>
+                    <p class="text-gray-600">拥有自己土地的独立农人，其收入直接来源于土地的产出，代表着一种正在衰落的传统。</p>
+                </div>
+            </div>
+        </section>
+        
+        <section id="labourer" class="mb-16 p-8 card">
+            <div class="grid grid-cols-1 lg:grid-cols-5 gap-8 items-center">
+                <div class="lg:col-span-2 text-center lg:text-left">
+                    <h2 class="text-3xl font-bold text-[#003459] mb-4">农业雇工：辛劳与糊口</h2>
+                    <p class="text-lg text-gray-600 mb-6">作为乡村社会的基石，农业雇工的生活由微薄且不稳定的工资决定。他们的年收入仅够勉强维生，几乎没有任何经济保障。</p>
+                    <div class="bg-[#00A8E8] text-white rounded-lg p-6 text-center">
+                        <p class="text-xl mb-2">估算年收入</p>
+                        <p class="text-5xl font-bold text-shadow">£25 - £30</p>
+                        <p class="text-sm opacity-80">(约等于今天的 £3,000 - £3,600)</p>
+                    </div>
+                </div>
+                <div class="lg:col-span-3">
+                    <div class="mb-8">
+                        <h3 class="text-xl font-bold text-center mb-2 text-[#007EA7]">地域工资鸿沟：周薪比较</h3>
+                        <p class="text-center text-gray-500 text-sm mb-4">北方靠近工业区，更高的工资吸引力导致农业工资也相对较高。</p>
+                        <div class="chart-container">
+                            <canvas id="regionalWagesChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-12">
+                <h3 class="text-xl font-bold text-center mb-2 text-[#007EA7]">每周10先令的预算困境</h3>
+                <p class="text-center text-gray-500 text-sm mb-4 max-w-2xl mx-auto">一个雇工家庭的周收入几乎完全被生活必需品吞噬，几乎没有剩余用于衣物、医疗或任何意外开支。</p>
+                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                    <div class="chart-container h-80 md:h-96">
+                        <canvas id="budgetDonutChart"></canvas>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-6xl text-[#00A8E8]">👞</p>
+                        <p class="text-lg font-bold mt-2">一双鞋 ≈ 一周工资</p>
+                        <p class="text-gray-600">一双普通鞋子约需8-9先令，这几乎耗尽了一个雇工一周10先令的全部收入，凸显了生活的极度艰难。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="tenant-farmer" class="mb-16 p-8 card">
+            <div class="text-center max-w-3xl mx-auto mb-10">
+                <h2 class="text-3xl font-bold text-[#003459] mb-4">租佃农场主：利润与风险</h2>
+                <p class="text-lg text-gray-600">他们是农业领域的资本家，收入是高风险的商业利润。天气、市场和经营决策共同决定了他们可能获得巨额财富，也可能面临毁灭性亏损。</p>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h3 class="text-xl font-bold text-center mb-2 text-[#007EA7]">收入的剧烈波动</h3>
+                    <p class="text-center text-gray-500 text-sm mb-4">以一个诺福克郡约600英亩的农场为例，其年利润在两年内天差地别。</p>
+                    <div class="chart-container">
+                        <canvas id="profitVolatilityChart"></canvas>
+                    </div>
+                </div>
+                <div class="w-full max-w-sm mx-auto">
+                    <h3 class="text-xl font-bold text-center mb-4 text-[#007EA7]">乡村社会金字塔</h3>
+                    <div class="relative flex flex-col items-center text-white text-center text-sm sm:text-base">
+                        <div class="w-full sm:w-10/12 md:w-8/12 lg:w-full">
+                            <div class="pyramid-level bg-[#003459] w-full py-3 sm:py-4 font-bold">地主</div>
+                        </div>
+                        <div class="w-11/12 sm:w-11/12 md:w-10/12 lg:w-11/12 -mt-1">
+                             <div class="pyramid-level bg-[#007EA7] w-full py-4 sm:py-6">
+                                <span class="font-bold">租佃农场主</span><br>& 自耕农
+                            </div>
+                        </div>
+                        <div class="w-full -mt-1">
+                            <div class="pyramid-level bg-[#00A8E8] w-full py-8 sm:py-10">
+                                <span class="font-bold">农业雇工</span><br>(绝大多数)
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-center text-gray-500 text-sm mt-4">土地、资本和劳动力被清晰地分离开来，财富沿着早已固化的社会结构沟渠流动。</p>
+                </div>
+            </div>
+        </section>
+
+        <footer class="text-center mt-16 pt-8 border-t border-gray-300">
+            <p class="text-gray-600">这是一个生产力空前发达的产业，其主要劳动力的生活水平却停留在维生边缘。1850年英国农业的“黄金时代”，其光芒并未普照乡村的每一个角落。</p>
+        </footer>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            const wrapLabel = (label, maxLength = 16) => {
+                if (label.length <= maxLength) {
+                    return label;
+                }
+                const words = label.split(' ');
+                let lines = [];
+                let currentLine = '';
+                for (const word of words) {
+                    if ((currentLine + ' ' + word).trim().length > maxLength) {
+                        lines.push(currentLine.trim());
+                        currentLine = word;
+                    } else {
+                        currentLine = (currentLine + ' ' + word).trim();
+                    }
+                }
+                if (currentLine) {
+                    lines.push(currentLine.trim());
+                }
+                return lines;
+            };
+
+            const tooltipTitleCallback = (tooltipItems) => {
+                const item = tooltipItems[0];
+                let label = item.chart.data.labels[item.dataIndex];
+                if (Array.isArray(label)) {
+                    return label.join(' ');
+                }
+                return label;
+            };
+
+            const chartDefaults = {
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: '#2D3142',
+                            font: {
+                                family: "'Noto Sans SC', sans-serif"
+                            }
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            title: tooltipTitleCallback
+                        },
+                        titleFont: {
+                            family: "'Noto Sans SC', sans-serif"
+                        },
+                        bodyFont: {
+                            family: "'Noto Sans SC', sans-serif"
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        ticks: { color: '#2D3142' },
+                        grid: { color: '#e0e0e0' }
+                    },
+                    x: {
+                        ticks: { color: '#2D3142' },
+                        grid: { display: false }
+                    }
+                },
+                responsive: true,
+                maintainAspectRatio: false
+            };
+
+            const regionalWagesCtx = document.getElementById('regionalWagesChart');
+            if(regionalWagesCtx) {
+                new Chart(regionalWagesCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['西南部', '东南部', '北部'],
+                        datasets: [{
+                            label: '估算平均周薪 (先令)',
+                            data: [8.7, 10.0, 10.5],
+                            backgroundColor: ['#00A8E8', '#007EA7', '#003459'],
+                            borderColor: '#ffffff',
+                            borderWidth: 2
+                        }]
+                    },
+                    options: { ...chartDefaults, indexAxis: 'y' }
+                });
+            }
+
+            const budgetDonutCtx = document.getElementById('budgetDonutChart');
+            if(budgetDonutCtx) {
+                new Chart(budgetDonutCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['面包', '房租', '茶/糖/盐', '煤炭/蜡烛', '土豆/蔬菜', '肥皂', '剩余'],
+                        datasets: [{
+                            data: [35, 15, 10, 10, 10, 5, 15],
+                            backgroundColor: ['#003459', '#007EA7', '#00A8E8', '#5bc0de', '#8d99ae', '#edf2f4', '#d9d9d9'],
+                            borderColor: '#ffffff',
+                            borderWidth: 3
+                        }]
+                    },
+                    options: {
+                        ...chartDefaults,
+                        plugins: {
+                            ...chartDefaults.plugins,
+                            legend: {
+                                position: 'right',
+                                labels: {
+                                    ...chartDefaults.plugins.legend.labels,
+                                    boxWidth: 20
+                                }
+                            }
+                        },
+                        scales: {
+                            y: { display: false },
+                            x: { display: false }
+                        }
+                    }
+                });
+            }
+
+            const profitVolatilityCtx = document.getElementById('profitVolatilityChart');
+            if(profitVolatilityCtx) {
+                new Chart(profitVolatilityCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['1824年 (丰年)', '1826年 (灾年)'],
+                        datasets: [{
+                            label: '年净利润 (£)',
+                            data: [919, -146],
+                            backgroundColor: (context) => context.raw >= 0 ? '#007EA7' : '#e53e3e',
+                            borderColor: '#ffffff',
+                            borderWidth: 2
+                        }]
+                    },
+                    options: chartDefaults
+                });
+            }
+
+        });
+    </script>
+
+</body>
+</html>

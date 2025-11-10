@@ -5,7 +5,7 @@
   <title>Das Kopenhagener Geisterreich</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
-    /* 全局：允许小屏滚动，背景深色 */
+    /* 全局 */
     html, body {
       margin: 0;
       padding: 0;
@@ -21,12 +21,10 @@
       align-items: center;
     }
 
-    /* 外框：桌面居中，小屏占满宽度并允许变高 */
     .game-frame {
       position: relative;
       width: 100%;
       max-width: 960px;
-      /* 桌面下接近16:9，高度自适应，最少 480 以容纳文字 */
       min-height: 480px;
       max-height: 100vh;
       background: radial-gradient(circle at top, #202020 0, #111 60%);
@@ -45,36 +43,74 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
+    /* 顶栏：加高，左标题 + 右竖排状态 */
     .top-bar {
       flex: 0 0 auto;
-      height: 40px;
+      height: 64px;
+      padding: 6px 10px 6px 10px;
       display: flex;
-      align-items: center;
-      padding: 0 12px;
+      align-items: stretch;
+      justify-content: space-between;
       font-size: 11px;
       color: #bbbbbb;
       letter-spacing: 1px;
       border-bottom: 1px solid #333;
       background: linear-gradient(to right, #181818, #141414);
       box-sizing: border-box;
-      gap: 6px;
-      white-space: nowrap;
+      gap: 8px;
+    }
+
+    .top-left {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
       overflow: hidden;
-      text-overflow: ellipsis;
     }
 
     .world-title {
       font-weight: 600;
       color: #e0e0e0;
-      margin-right: 8px;
+      font-size: 12px;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+
+    .world-subtitle {
+      margin-top: 2px;
+      font-size: 9px;
+      color: #888;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+
+    .top-right {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-end;
+      gap: 2px;
+      min-width: 90px;
+    }
+
+    .status-column-label {
+      font-size: 8px;
+      color: #666;
     }
 
     .status-tag {
-      padding: 1px 5px;
+      padding: 1px 4px;
       border-radius: 2px;
       font-size: 9px;
       border: 1px solid #444;
       color: #999;
+      max-width: 140px;
+      text-align: right;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      background: rgba(10,10,10,0.9);
     }
 
     .status-tag.virtue {
@@ -87,7 +123,7 @@
       border-color: #336b88;
     }
 
-    /* 场景区域：自适应高度，底部留出对话框空间 */
+    /* 场景区域 */
     .scene {
       position: relative;
       flex: 1 1 auto;
@@ -100,7 +136,7 @@
       overflow: hidden;
     }
 
-    /* 底部对话框：始终贴底，不遮挡自身内容 */
+    /* 底部对话框 */
     .dialogue-box {
       position: absolute;
       left: 0;
@@ -174,7 +210,7 @@
       color: #f2f2f2;
       white-space: pre-wrap;
       user-select: none;
-      max-height: 30vh;          /* 防止在矮屏上溢出，超出时可滚动 */
+      max-height: 30vh;
       overflow-y: auto;
       padding-right: 2px;
       box-sizing: border-box;
@@ -193,7 +229,7 @@
       color: #888;
     }
 
-    /* 中央伪选项：适配小屏，使用百分比宽度 */
+    /* 中央伪选项 */
     .center-choice-overlay {
       position: absolute;
       inset: 0;
@@ -249,7 +285,7 @@
       border-color: #ffffff;
     }
 
-    /* 重置按钮：小屏时略小，悬浮不挡文字（在对话框上方一点） */
+    /* 重置按钮 */
     .reset-btn {
       position: absolute;
       right: 10px;
@@ -289,12 +325,18 @@
         max-height: none;
       }
       .top-bar {
-        height: 34px;
-        font-size: 10px;
-        padding: 0 8px;
+        height: 72px;
+        padding: 6px 8px;
       }
       .world-title {
-        font-size: 10px;
+        font-size: 11px;
+      }
+      .world-subtitle {
+        font-size: 8px;
+      }
+      .status-tag {
+        font-size: 8px;
+        max-width: 80px;
       }
       .dialogue-box {
         padding: 8px 8px 6px;
@@ -326,10 +368,16 @@
 <body>
 <div class="game-frame">
   <div class="top-bar">
-    <div class="world-title">哥本哈根灵帝国 // Das Kopenhagener Geisterreich</div>
-    <div class="status-tag virtue">集权拥护：蒙福时代</div>
-    <div class="status-tag logic">进步主义封锁：生效中</div>
-    <div class="status-tag">灵脉网络：运行中</div>
+    <div class="top-left">
+      <div class="world-title">哥本哈根灵帝国</div>
+      <div class="world-subtitle">Das Kopenhagener Geisterreich // 灵脉监测在线</div>
+    </div>
+    <div class="top-right">
+      <div class="status-column-label">帝国状态</div>
+      <div class="status-tag virtue">集权拥护：蒙福时代</div>
+      <div class="status-tag logic">进步主义封锁：生效中</div>
+      <div class="status-tag">灵脉网络：运行中</div>
+    </div>
   </div>
 
   <div class="scene" id="scene">
@@ -357,7 +405,7 @@
 </div>
 
 <script>
-  // 音效与BGM（相对路径）
+  // 音效 & BGM
   const switchSound = new Audio("./assets/audio/click.mp3");
   switchSound.volume = 0.35;
 
@@ -369,7 +417,7 @@
     if (bgmStarted) return;
     bgmStarted = true;
     bgm.play().catch(() => {
-      bgmStarted = false; // 若被阻止，不强行重试
+      bgmStarted = false;
     });
   }
 
@@ -663,10 +711,8 @@
     clearInterval(typingTimer);
     isTyping = true;
     dialogueTextEl.textContent = "";
-
     const chars = text.split("");
     let i = 0;
-
     typingTimer = setInterval(() => {
       if (i >= chars.length) {
         clearInterval(typingTimer);
@@ -686,7 +732,6 @@
     centerChoiceTextEl.textContent = choice.hint || "";
     centerChoiceBtn.textContent = choice.button || "……";
     centerChoiceOverlay.style.display = "flex";
-
     centerChoiceBtn.onclick = () => {
       playSwitchSound();
       lockClick();
@@ -718,8 +763,7 @@
 
   dialogueBox.addEventListener("click", () => {
     if (clickLocked) return;
-
-    tryStartBgm(); // 首次交互尝试播放BGM
+    tryStartBgm();
 
     const data = dialogues[currentIndex];
     if (!data) return;

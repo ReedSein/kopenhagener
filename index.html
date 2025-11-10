@@ -3,35 +3,29 @@
 <head>
   <meta charset="UTF-8" />
   <title>Das Kopenhagener Geisterreich</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
-    /* 全局 */
-    html, body {
+    body {
       margin: 0;
       padding: 0;
-      height: 100%;
       background: #151515;
-      font-family: "Noto Sans SC", "Microsoft YaHei", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      font-family: "Noto Sans SC", "Microsoft YaHei", system-ui, sans-serif;
       color: #f5f5f5;
-    }
-
-    body {
       display: flex;
       justify-content: center;
       align-items: center;
+      height: 100vh;
+      overflow: hidden;
     }
 
     .game-frame {
-      position: relative;
-      width: 100%;
-      max-width: 960px;
-      min-height: 480px;
-      max-height: 100vh;
+      width: 960px;
+      height: 540px;
       background: radial-gradient(circle at top, #202020 0, #111 60%);
       border: 1px solid #444;
       box-shadow: 0 0 30px rgba(0,0,0,0.8);
       display: flex;
       flex-direction: column;
+      position: relative;
       overflow: hidden;
       opacity: 0;
       transform: translateY(10px);
@@ -43,74 +37,31 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* 顶栏：加高，左标题 + 右竖排状态 */
     .top-bar {
-      flex: 0 0 auto;
-      height: 64px;
-      padding: 6px 10px 6px 10px;
+      height: 40px;
       display: flex;
-      align-items: stretch;
-      justify-content: space-between;
-      font-size: 11px;
+      align-items: center;
+      padding: 0 14px;
+      font-size: 12px;
       color: #bbbbbb;
       letter-spacing: 1px;
       border-bottom: 1px solid #333;
       background: linear-gradient(to right, #181818, #141414);
-      box-sizing: border-box;
-      gap: 8px;
-    }
-
-    .top-left {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      overflow: hidden;
     }
 
     .world-title {
       font-weight: 600;
       color: #e0e0e0;
-      font-size: 12px;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      overflow: hidden;
-    }
-
-    .world-subtitle {
-      margin-top: 2px;
-      font-size: 9px;
-      color: #888;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      overflow: hidden;
-    }
-
-    .top-right {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: flex-end;
-      gap: 2px;
-      min-width: 90px;
-    }
-
-    .status-column-label {
-      font-size: 8px;
-      color: #666;
+      margin-right: 16px;
     }
 
     .status-tag {
-      padding: 1px 4px;
+      margin-right: 10px;
+      padding: 1px 6px;
       border-radius: 2px;
-      font-size: 9px;
+      font-size: 10px;
       border: 1px solid #444;
       color: #999;
-      max-width: 140px;
-      text-align: right;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      overflow: hidden;
-      background: rgba(10,10,10,0.9);
     }
 
     .status-tag.virtue {
@@ -123,33 +74,29 @@
       border-color: #336b88;
     }
 
-    /* 场景区域 */
     .scene {
+      flex: 1;
       position: relative;
-      flex: 1 1 auto;
       background:
         linear-gradient(to bottom, rgba(255,255,255,0.02) 0, transparent 40%),
         url("https://picsum.photos/seed/geisterreich-port/1280/720") center/cover no-repeat fixed;
       filter: grayscale(70%);
       opacity: 0.92;
       transition: background-image 0.6s ease, filter 0.6s ease;
-      overflow: hidden;
     }
 
-    /* 底部对话框 */
     .dialogue-box {
       position: absolute;
       left: 0;
       right: 0;
       bottom: 0;
-      padding: 10px 12px 8px;
-      background: rgba(5,5,5,0.94);
+      padding: 14px 18px 10px;
+      background: rgba(5,5,5,0.92);
       border-top: 1px solid #2a2a2a;
       backdrop-filter: blur(4px);
       box-shadow: 0 -6px 18px rgba(0,0,0,0.8);
       cursor: pointer;
       transition: opacity 0.3s ease;
-      box-sizing: border-box;
     }
 
     .dialogue-box.fade-out { opacity: 0; }
@@ -158,17 +105,15 @@
     .speaker-label {
       display: inline-flex;
       align-items: center;
-      padding: 2px 7px;
-      margin-bottom: 4px;
+      padding: 2px 8px;
+      margin-bottom: 6px;
       border-radius: 2px;
-      font-size: 10px;
+      font-size: 11px;
       letter-spacing: 1px;
       border: 1px solid #555;
       text-transform: uppercase;
       color: #f0f0f0;
       background: rgba(20,20,20,0.98);
-      max-width: 100%;
-      box-sizing: border-box;
     }
 
     .speaker-label .role {
@@ -199,37 +144,33 @@
     }
 
     .system-label {
-      font-size: 9px;
+      font-size: 10px;
       color: #888;
       margin-left: 4px;
     }
 
     .dialogue-text {
-      font-size: 13px;
+      font-size: 14px;
       line-height: 1.7;
       color: #f2f2f2;
       white-space: pre-wrap;
       user-select: none;
-      max-height: 30vh;
-      overflow-y: auto;
-      padding-right: 2px;
-      box-sizing: border-box;
     }
 
     .continue-hint {
-      margin-top: 3px;
-      font-size: 9px;
-      color: #777;
+      margin-top: 6px;
+      font-size: 10px;
+      color: #666;
       text-align: right;
       visibility: hidden;
     }
     .continue-hint::after {
       content: " ▶";
-      font-size: 8px;
+      font-size: 9px;
       color: #888;
     }
 
-    /* 中央伪选项 */
+    /* 中央伪选项容器（覆盖式，Gal风） */
     .center-choice-overlay {
       position: absolute;
       inset: 0;
@@ -244,14 +185,12 @@
     .center-choice-box {
       background: rgba(15,15,15,0.98);
       border: 1px solid #666;
-      padding: 10px 14px;
+      padding: 14px 18px;
       border-radius: 4px;
-      width: 80%;
+      min-width: 360px;
       max-width: 520px;
-      min-width: 220px;
       box-shadow: 0 0 20px rgba(0,0,0,0.85);
       text-align: center;
-      box-sizing: border-box;
       animation: fadeChoice 0.25s ease-out;
     }
 
@@ -261,23 +200,21 @@
     }
 
     .center-choice-text {
-      font-size: 12px;
+      font-size: 13px;
       color: #dddddd;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
     }
 
     .center-choice-btn {
       display: inline-block;
-      padding: 5px 14px;
-      font-size: 11px;
+      padding: 6px 16px;
+      font-size: 12px;
       color: #f5f5f5;
       background: #222;
       border: 1px solid #888;
       border-radius: 3px;
       cursor: pointer;
       transition: all 0.2s ease;
-      max-width: 100%;
-      white-space: normal;
     }
 
     .center-choice-btn:hover {
@@ -288,10 +225,10 @@
     /* 重置按钮 */
     .reset-btn {
       position: absolute;
-      right: 10px;
-      bottom: 80px;
-      padding: 3px 8px;
-      font-size: 10px;
+      right: 18px;
+      bottom: 40px;
+      padding: 4px 10px;
+      font-size: 11px;
       color: #ddd;
       background: rgba(20,20,20,0.96);
       border: 1px solid #555;
@@ -313,71 +250,15 @@
       background: #262626;
       border-color: #888;
     }
-
-    /* 小屏优化 */
-    @media (max-width: 600px) {
-      body {
-        align-items: flex-start;
-      }
-      .game-frame {
-        margin: 8px;
-        height: auto;
-        max-height: none;
-      }
-      .top-bar {
-        height: 72px;
-        padding: 6px 8px;
-      }
-      .world-title {
-        font-size: 11px;
-      }
-      .world-subtitle {
-        font-size: 8px;
-      }
-      .status-tag {
-        font-size: 8px;
-        max-width: 80px;
-      }
-      .dialogue-box {
-        padding: 8px 8px 6px;
-      }
-      .dialogue-text {
-        font-size: 12px;
-        max-height: 40vh;
-      }
-      .center-choice-box {
-        padding: 8px 10px;
-        width: 86%;
-      }
-      .center-choice-text {
-        font-size: 11px;
-      }
-      .center-choice-btn {
-        font-size: 10px;
-        padding: 4px 10px;
-      }
-      .reset-btn {
-        bottom: 74px;
-        right: 8px;
-        font-size: 9px;
-        padding: 2px 6px;
-      }
-    }
   </style>
 </head>
 <body>
 <div class="game-frame">
   <div class="top-bar">
-    <div class="top-left">
-      <div class="world-title">哥本哈根灵帝国</div>
-      <div class="world-subtitle">Das Kopenhagener Geisterreich // 灵脉监测在线</div>
-    </div>
-    <div class="top-right">
-      <div class="status-column-label">帝国状态</div>
-      <div class="status-tag virtue">集权拥护：蒙福时代</div>
-      <div class="status-tag logic">进步主义封锁：生效中</div>
-      <div class="status-tag">灵脉网络：运行中</div>
-    </div>
+    <div class="world-title">哥本哈根灵帝国 // Das Kopenhagener Geisterreich</div>
+    <div class="status-tag virtue">集权拥护：蒙福时代</div>
+    <div class="status-tag logic">进步主义封锁：生效中</div>
+    <div class="status-tag">灵脉网络：运行中</div>
   </div>
 
   <div class="scene" id="scene">
@@ -405,18 +286,21 @@
 </div>
 
 <script>
-  // 音效 & BGM
+  // 相对路径音效与背景音乐
   const switchSound = new Audio("./assets/audio/click.mp3");
   switchSound.volume = 0.35;
 
   const bgm = new Audio("./assets/audio/bgm.mp3");
   bgm.loop = true;
   bgm.volume = 0.25;
+
   let bgmStarted = false;
   function tryStartBgm() {
     if (bgmStarted) return;
     bgmStarted = true;
+    // 必须在用户交互后调用，符合浏览器策略
     bgm.play().catch(() => {
+      // 如果仍被阻止，就保持静音，不反复报错
       bgmStarted = false;
     });
   }
@@ -429,6 +313,7 @@
   const speakerLabelEl = document.getElementById("speakerLabel");
   const continueHintEl = document.getElementById("continueHint");
   const resetBtn = document.getElementById("resetBtn");
+
   const centerChoiceOverlay = document.getElementById("centerChoiceOverlay");
   const centerChoiceTextEl = document.getElementById("centerChoiceText");
   const centerChoiceBtn = document.getElementById("centerChoiceBtn");
@@ -688,6 +573,7 @@
   function renderDialogue(index) {
     const data = dialogues[index];
     if (!data) return;
+
     inCenterChoice = false;
     centerChoiceArmed = false;
     centerChoiceOverlay.style.display = "none";
@@ -711,8 +597,10 @@
     clearInterval(typingTimer);
     isTyping = true;
     dialogueTextEl.textContent = "";
+
     const chars = text.split("");
     let i = 0;
+
     typingTimer = setInterval(() => {
       if (i >= chars.length) {
         clearInterval(typingTimer);
@@ -729,9 +617,11 @@
     inCenterChoice = true;
     centerChoiceArmed = false;
     continueHintEl.style.visibility = "hidden";
+
     centerChoiceTextEl.textContent = choice.hint || "";
     centerChoiceBtn.textContent = choice.button || "……";
     centerChoiceOverlay.style.display = "flex";
+
     centerChoiceBtn.onclick = () => {
       playSwitchSound();
       lockClick();
@@ -763,11 +653,13 @@
 
   dialogueBox.addEventListener("click", () => {
     if (clickLocked) return;
-    tryStartBgm();
+
+    tryStartBgm(); // 首次点击时尝试启动BGM
 
     const data = dialogues[currentIndex];
     if (!data) return;
 
+    // 1. 正在打字：点击只补完
     if (isTyping) {
       clearInterval(typingTimer);
       dialogueTextEl.textContent = data.text;
@@ -777,14 +669,17 @@
       return;
     }
 
+    // 2. 伪选项已弹出：底部点击无效
     if (inCenterChoice) return;
 
+    // 3. 有伪选项且已就绪：此点击弹出伪选项
     if (centerChoiceArmed && data.centerChoice) {
       showCenterChoice(data.centerChoice);
       lockClick();
       return;
     }
 
+    // 4. 正常进入下一条
     currentIndex++;
     if (currentIndex < dialogues.length) {
       playSwitchSound();

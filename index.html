@@ -2,9 +2,10 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
-  <title>Das Kopenhagener Geisterreich</title>
+  <title>哥本哈根灵帝国 · 极乐迪斯科式对话演示</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
+    /* 全局 */
     html, body {
       margin: 0;
       padding: 0;
@@ -42,14 +43,14 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* 顶栏：四行竖排文本，简单直接，不再横向挤压 */
+    /* 顶栏：固定四行竖排，不拼一行 */
     .top-bar {
       flex: 0 0 auto;
-      padding: 6px 10px 6px;
+      padding: 6px 10px 4px;
       display: flex;
       flex-direction: column;
-      justify-content: center;
-      gap: 2px;
+      justify-content: flex-start;
+      gap: 3px;
       font-size: 11px;
       color: #bbbbbb;
       border-bottom: 1px solid #333;
@@ -57,23 +58,29 @@
       box-sizing: border-box;
     }
 
-    .top-line-1 {
-      font-weight: 600;
-      color: #e0e0e0;
-      font-size: 12px;
+    .top-line {
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
 
-    .top-line-2,
-    .top-line-3,
-    .top-line-4 {
+    .top-line.title {
+      font-weight: 600;
+      color: #e0e0e0;
+      font-size: 12px;
+    }
+
+    .top-line.status {
       font-size: 10px;
-      color: #a8a8a8;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      color: #cccccc;
+    }
+
+    .top-line.status.strong {
+      color: #ffd27f;
+    }
+
+    .top-line.status.dim {
+      color: #8aa4c8;
     }
 
     /* 场景区域 */
@@ -89,6 +96,7 @@
       overflow: hidden;
     }
 
+    /* 底部对话框 */
     .dialogue-box {
       position: absolute;
       left: 0;
@@ -128,11 +136,27 @@
       font-weight: 600;
     }
 
-    .type-glory .speaker-label { border-color: #c79a3b; color: #ffd27f; }
-    .type-mandate .speaker-label { border-color: #7fd4ff; color: #b9e6ff; }
-    .type-material .speaker-label { border-color: #8dcf7c; color: #d8ffd0; }
-    .type-logic .speaker-label { border-color: #ff6b81; color: #ffb3c1; }
-    .type-system .speaker-label { border-color: #888; color: #cccccc; font-style: italic; }
+    .type-glory .speaker-label {
+      border-color: #c79a3b;
+      color: #ffd27f;
+    }
+    .type-mandate .speaker-label {
+      border-color: #7fd4ff;
+      color: #b9e6ff;
+    }
+    .type-material .speaker-label {
+      border-color: #8dcf7c;
+      color: #d8ffd0;
+    }
+    .type-logic .speaker-label {
+      border-color: #ff6b81;
+      color: #ffb3c1;
+    }
+    .type-system .speaker-label {
+      border-color: #888;
+      color: #cccccc;
+      font-style: italic;
+    }
 
     .system-label {
       font-size: 9px;
@@ -165,6 +189,7 @@
       color: #888;
     }
 
+    /* 中央伪选项 */
     .center-choice-overlay {
       position: absolute;
       inset: 0;
@@ -220,6 +245,7 @@
       border-color: #ffffff;
     }
 
+    /* 重置按钮 */
     .reset-btn {
       position: absolute;
       right: 10px;
@@ -248,20 +274,26 @@
       border-color: #888;
     }
 
+    /* 小屏：保持四行竖排，只是字号略缩 */
     @media (max-width: 600px) {
-      body { align-items: flex-start; }
+      body {
+        align-items: flex-start;
+      }
       .game-frame {
         margin: 8px;
         height: auto;
         max-height: none;
       }
       .top-bar {
-        padding: 6px 8px;
+        padding: 6px 8px 4px;
+        gap: 2px;
       }
-      .top-line-1 { font-size: 11px; }
-      .top-line-2,
-      .top-line-3,
-      .top-line-4 { font-size: 9px; }
+      .top-line.title {
+        font-size: 11px;
+      }
+      .top-line.status {
+        font-size: 9px;
+      }
       .dialogue-box {
         padding: 8px 8px 6px;
       }
@@ -291,14 +323,16 @@
 </head>
 <body>
 <div class="game-frame">
+  <!-- 顶栏：固定四行 -->
   <div class="top-bar">
-    <div class="top-line-1">哥本哈根灵帝国 // Das Kopenhagener Geisterreich</div>
-    <div class="top-line-2">集权拥护：蒙福时代</div>
-    <div class="top-line-3">进步主义在我国已经销声匿迹</div>
-    <div class="top-line-4">灵脉网络：运行中</div>
+    <div class="top-line title">哥本哈根灵帝国 // Das Kopenhagener Geisterreich</div>
+    <div class="top-line status strong">集权拥护：蒙福时代</div>
+    <div class="top-line status dim">进步主义在我国已经销声匿迹</div>
+    <div class="top-line status">灵脉网络：运行中</div>
   </div>
 
   <div class="scene" id="scene">
+    <!-- 中央伪选项层 -->
     <div class="center-choice-overlay" id="centerChoiceOverlay">
       <div class="center-choice-box">
         <div class="center-choice-text" id="centerChoiceText"></div>
@@ -306,6 +340,7 @@
       </div>
     </div>
 
+    <!-- 底部对话框 -->
     <div class="dialogue-box fade-in" id="dialogueBox">
       <div class="speaker-label" id="speakerLabel">
         <span class="role">【系统】</span>
@@ -315,11 +350,13 @@
       <div class="continue-hint" id="continueHint">点击以继续</div>
     </div>
 
+    <!-- 重置按钮 -->
     <button class="reset-btn" id="resetBtn">从头再来</button>
   </div>
 </div>
 
 <script>
+  // 音效 & BGM
   const switchSound = new Audio("./assets/audio/click.mp3");
   switchSound.volume = 0.35;
 
@@ -358,7 +395,10 @@
   }
 
   function playSwitchSound() {
-    try { switchSound.currentTime = 0; switchSound.play(); } catch (e) {}
+    try {
+      switchSound.currentTime = 0;
+      switchSound.play();
+    } catch (e) {}
   }
 
   function applyBackground(bgUrl) {
@@ -369,59 +409,252 @@
   }
 
   const dialogues = [
-    { speaker:"【系统】", type:"system", tone:"你在昏暗的港口问出那个名字。", text:"“哥本哈根灵帝国？”\n\n空气骤然一紧。某种看不见的视线，从高空垂下。" },
-    { speaker:"【系统】", type:"system", tone:"叙述", text:"啊，您问起了哥本哈根灵帝国……Das Kopenhagener Geisterreich。", centerChoice:{ hint:"那声音在你耳畔回响，等待你的回应。", button:"追问这片“蒙受神恩的帝国”。", nextBg:"url('https://picsum.photos/seed/geisterreich-palace/1280/720')" } },
-    { speaker:"【荣光】", type:"glory", tone:"帝国人格 · 崇敬", text:"是的，请允许我。请允许我，以一名帝国子民的身份，为您描绘这片蒙受神恩……不，这片即是神恩本身的土地。" },
-    { speaker:"【荣光】", type:"glory", tone:"帝国人格 · 崇敬", text:"我们的帝国，是神权与奥秘的最终熔合，一个真正意义上的政教合一神国。在这里，谈论世俗权力……那是一种亵渎。" },
-    { speaker:"【荣光】", type:"glory", tone:"帝国人格 · 崇敬", text:"我们的一切秩序，皆源自唯一的意志——作为帝国神脑 (Der Primärgeist) 的至高存在。这神圣的秩序由阿施莱塔、神秘学家以及古老的封建贵族共同守护。" },
-    { speaker:"【荣光】", type:"glory", tone:"帝国人格 · 崇敬", text:"他们不是统治者，他们是机体的骨架，是意志的传导通路。" },
-    { speaker:"【荣光】", type:"glory", tone:"帝国人格 · 崇敬", text:"而这一切，都在我们敬爱的灵帝 (Der Geistkaiser)，莱蒂里亞·斯塔尼爾·維塔爾斯陛下 (Seine Majestät, Laetitia Stanier Vitalis) 的神圣统御下成为现实。" },
-    { speaker:"【荣光】", type:"glory", tone:"帝国人格 · 崇敬", text:"陛下的意志即是真理。因此我们——在私下里，在内心最隐秘的祈祷中——怀着最深的敬畏，称他为“那声音” (Die Stimme)。", centerChoice:{ hint:"你的思绪被“那声音”的光辉包裹，另一个观念正等待发言。", button:"顺着天命的线索，继续倾听。", nextBg:"url('https://picsum.photos/seed/geisterreich-cabinet/1280/720')" } },
-    { speaker:"【天命昭昭】", type:"mandate", tone:"帝国人格 · 宿命论", text:"正是“那声音”，以凡人无法企及的政治智慧与洞悉万灵的外交手腕，巩固了帝国的神圣根基。" },
-    { speaker:"【天命昭昭】", type:"mandate", tone:"帝国人格 · 宿命论", text:"他铲除了以二皇子为首的选举派野心家们，将那些喧嚣的、新兴的产业资本家置于其应有的、服务于神意的位置上；" },
-    { speaker:"【天命昭昭】", type:"mandate", tone:"帝国人格 · 宿命论", text:"他将迷途的约翰灵国 (Das Johann-Geisterreich) 重新收拢，使其回归万物属灵的大家庭。" },
-    { speaker:"【天命昭昭】", type:"mandate", tone:"帝国人格 · 宿命论", text:"也正是他，颁布了《进步主义封锁令》——那与其说是法令，不如说是一道神圣结界，将外界那些虚妄、腐朽、喋喋不休的思潮隔绝在外，守护了我们精神的绝对纯净。" },
-    { speaker:"【天命昭昭】", type:"mandate", tone:"帝国人格 · 宿命论", text:"我们正处在【集权拥护】的蒙福时代。这是来自真灵之源 (Die Urgeist-Quelle) 的直接恩典。" },
-    { speaker:"【天命昭昭】", type:"mandate", tone:"帝国人格 · 宿命论", text:"每当帝国的版图增加五处区划，我们整个国度的力量便会迎来一次质的飞跃。您能理解吗？这神迹般的伟力，正加速着帝国整合一切资源的伟业。", centerChoice:{ hint:"在命定的宏图之后，你可以选择俯身察看帝国的日常肌理。", button:"将注意力转向帝国的日常与物质秩序。", nextBg:"url('https://picsum.photos/seed/geisterreich-city/1280/720')" } },
-    { speaker:"【唯物主义】", type:"material", tone:"帝国人格 · 冷静陈述", text:"凡俗之人或许不解，他们只看得到我们从不喧嚣的市场，却看不见我们真正的财富在于精神的秩序与富足。" },
-    { speaker:"【唯物主义】", type:"material", tone:"帝国人格 · 冷静陈述", text:"帝国的金库永远充盈，足以应对任何所谓的“挑战”。" },
-    { speaker:"【唯物主义】", type:"material", tone:"帝国人格 · 冷静陈述", text:"我们的城市依靠高效的商埠枢纽维持着物质的流动，但在广大的教区，修道院和税仓才是真正的核心——信仰与力量的源泉。" },
-    { speaker:"【唯物主义】", type:"material", tone:"帝国人格 · 冷静陈述", text:"我们脚下的土地蕴藏着香料与金属，但开采它们并非为了世俗的享乐，而是为了服务于一个远比黄金更伟大的目标。" },
-    { speaker:"【唯物主义】", type:"material", tone:"帝国人格 · 冷静陈述", text:"我们所有的研究力量，都汇聚于圣三一大学，专注于那唯一值得探索的领域：通往真理的神秘学。" },
-    { speaker:"【唯物主义】", type:"material", tone:"帝国人格 · 冷静陈述", text:"至于我们的军事力量……凡人无法揣度。帝国的敌人将要面对的，不是刀剑，而是来自灵魂深处的战栗。" },
-    { speaker:"【唯物主义】", type:"material", tone:"帝国人格 · 冷静陈述", text:"神秘的厄诡术士与荣耀的灵体骑士团是我们神圣军团的核心。雄伟的麦哲伦要塞有结界盾庇护，更能直接洞悉来犯之敌的意志。" },
-    { speaker:"【唯物主义】", type:"material", tone:"帝国人格 · 冷静陈述", text:"我们的天空，由卡图拉鲁翼群守护，他们凭借纯粹的灵能翱翔天际。这是一支……是的，一支超脱了物质束缚的超自然作战体系。" },
-    { speaker:"【唯物主义】", type:"material", tone:"帝国人格 · 冷静陈述", text:"我们的外交，同样不是世俗的合纵连横，而是一项神圣的使命。通过「万物属灵朝贡制」（Die Allbeseelte Schutzherrschaftsordnung），我们与热灵国（Das Re-Geisterreich）、望厦灵国（Das Wanghia-Geisterreich）、纳特尔灵国（Das Nater-Geisterreich）等兄弟之邦，缔结了神圣的宗教盟约，组成了伟大的万物属灵联合 (Der Allbeseelte Bund)。" },
-    { speaker:"【唯物主义】", type:"material", tone:"帝国人格 · 冷静陈述", text:"我们共享信仰的荣光、贸易的果实与外交的尊严。外界的愚者或许会因我们的威望与力量而畏惧，但这恰恰证明了我们的孤高与正确。" },
-    { speaker:"【唯物主义】", type:"material", tone:"帝国人格 · 冷静陈述", text:"我们的灵脉网络遍布世界，没有什么秘密能逃过帝国的眼睛。唯一限制我们的，只是我们不愿轻易动用神圣武力，进行无谓的扩张。", centerChoice:{ hint:"在这看似完美的秩序背后，你的思维开始发出轻微的噪声。", button:"质疑这种完美秩序背后的代价。", nextBg:"url('https://picsum.photos/seed/geisterreich-interrogation/1280/720')" } },
-    { speaker:"【逻辑检定：失败】", type:"logic", tone:"系统判定", text:"外界的愚者，或是潜伏于阴影中的叛逆者，时常诟病我们的社会缺乏‘流动’，军事不屑于‘现代化’。" },
-    { speaker:"【逻辑检定：失败】", type:"logic", tone:"系统判定", text:"这是何等的浅薄。何等的可笑。" },
-    { speaker:"【逻辑检定：失败】", type:"logic", tone:"系统判定", text:"他们所谓的‘流动’，不过是灵魂无根的混乱；他们所谓的‘现代化’，不过是舍弃灵光 (Seelenfunke)、转而拥抱冰冷钢铁的堕落之道。" },
-    { speaker:"【逻辑检定：失败】", type:"logic", tone:"系统判定", text:"我们追求的是秩序森然的永恒，是在神脑 (Der Primärgeist) 指引下的集体升华。而他们，却在追逐尘世之灵 (Der Irdische Geist) 设下的、名为‘进步’的虚假陷阱。" },
-    { speaker:"【逻辑检定：失败】", type:"logic", tone:"系统判定", text:"我们唯一的挑战？" },
-    { speaker:"【逻辑检定：失败】", type:"logic", tone:"系统判定", text:"是如何在神圣的扩张与抵御世俗腐蚀之间，永远保持那精妙的、神圣的平衡。", centerChoice:{ hint:"你可以选择接受这一结论，或只是将其铭记在心。", button:"在心底承认：他们即是秩序本身。", nextBg:"url('https://picsum.photos/seed/geisterreich-last/1280/720')" } },
-    { speaker:"【荣光】", type:"glory", tone:"帝国人格 · 低声宣告", text:"因为我们是哥本哈根灵帝国。是真理的化身。\n是这个堕落世界中，秩序的最后壁垒。" }
+    // 系统 -> 荣光
+    {
+      speaker: "【系统】",
+      type: "system",
+      tone: "你在昏暗的港口问出那个名字。",
+      text: "“哥本哈根灵帝国？”\n\n空气骤然一紧。某种看不见的视线，从高空垂下。"
+    },
+    {
+      speaker: "【系统】",
+      type: "system",
+      tone: "叙述",
+      text: "啊，您问起了哥本哈根灵帝国……Das Kopenhagener Geisterreich。",
+      centerChoice: {
+        hint: "那声音在你耳畔回响，等待你的回应。",
+        button: "追问这片“蒙受神恩的帝国”。",
+        nextBg: "url('https://picsum.photos/seed/geisterreich-palace/1280/720')"
+      }
+    },
+    // 荣光
+    {
+      speaker: "【荣光】",
+      type: "glory",
+      tone: "帝国人格 · 崇敬",
+      text: "是的，请允许我。请允许我，以一名帝国子民的身份，为您描绘这片蒙受神恩……不，这片即是神恩本身的土地。"
+    },
+    {
+      speaker: "【荣光】",
+      type: "glory",
+      tone: "帝国人格 · 崇敬",
+      text: "我们的帝国，是神权与奥秘的最终熔合，一个真正意义上的政教合一神国。在这里，谈论世俗权力……那是一种亵渎。"
+    },
+    {
+      speaker: "【荣光】",
+      type: "glory",
+      tone: "帝国人格 · 崇敬",
+      text: "我们的一切秩序，皆源自唯一的意志——作为帝国神脑 (Der Primärgeist) 的至高存在。这神圣的秩序由阿施莱塔、神秘学家以及古老的封建贵族共同守护。"
+    },
+    {
+      speaker: "【荣光】",
+      type: "glory",
+      tone: "帝国人格 · 崇敬",
+      text: "他们不是统治者，他们是机体的骨架，是意志的传导通路。"
+    },
+    {
+      speaker: "【荣光】",
+      type: "glory",
+      tone: "帝国人格 · 崇敬",
+      text: "而这一切，都在我们敬爱的灵帝 (Der Geistkaiser)，莱蒂里亞·斯塔尼爾·維塔爾斯陛下 (Seine Majestät, Laetitia Stanier Vitalis) 的神圣统御下成为现实。"
+    },
+    {
+      speaker: "【荣光】",
+      type: "glory",
+      tone: "帝国人格 · 崇敬",
+      text: "陛下的意志即是真理。因此我们——在私下里，在内心最隐秘的祈祷中——怀着最深的敬畏，称他为“那声音” (Die Stimme)。",
+      centerChoice: {
+        hint: "你的思绪被“那声音”的光辉包裹，另一个观念正等待发言。",
+        button: "顺着天命的线索，继续倾听。",
+        nextBg: "url('https://picsum.photos/seed/geisterreich-cabinet/1280/720')"
+      }
+    },
+    // 天命昭昭
+    {
+      speaker: "【天命昭昭】",
+      type: "mandate",
+      tone: "帝国人格 · 宿命论",
+      text: "正是“那声音”，以凡人无法企及的政治智慧与洞悉万灵的外交手腕，巩固了帝国的神圣根基。"
+    },
+    {
+      speaker: "【天命昭昭】",
+      type: "mandate",
+      tone: "帝国人格 · 宿命论",
+      text: "他铲除了以二皇子为首的选举派野心家们，将那些喧嚣的、新兴的产业资本家置于其应有的、服务于神意的位置上；"
+    },
+    {
+      speaker: "【天命昭昭】",
+      type: "mandate",
+      tone: "帝国人格 · 宿命论",
+      text: "他将迷途的约翰灵国 (Das Johann-Geisterreich) 重新收拢，使其回归万物属灵的大家庭。"
+    },
+    {
+      speaker: "【天命昭昭】",
+      type: "mandate",
+      tone: "帝国人格 · 宿命论",
+      text: "也正是他，颁布了《进步主义封锁令》——那与其说是法令，不如说是一道神圣结界，将外界那些虚妄、腐朽、喋喋不休的思潮隔绝在外，守护了我们精神的绝对纯净。"
+    },
+    {
+      speaker: "【天命昭昭】",
+      type: "mandate",
+      tone: "帝国人格 · 宿命论",
+      text: "我们正处在【集权拥护】的蒙福时代。这是来自真灵之源 (Die Urgeist-Quelle) 的直接恩典。"
+    },
+    {
+      speaker: "【天命昭昭】",
+      type: "mandate",
+      tone: "帝国人格 · 宿命论",
+      text: "每当帝国的版图增加五处区划，我们整个国度的力量便会迎来一次质的飞跃。您能理解吗？这神迹般的伟力，正加速着帝国整合一切资源的伟业。",
+      centerChoice: {
+        hint: "在命定的宏图之后，你可以选择俯身察看帝国的日常肌理。",
+        button: "将注意力转向帝国的日常与物质秩序。",
+        nextBg: "url('https://picsum.photos/seed/geisterreich-city/1280/720')"
+      }
+    },
+    // 唯物主义
+    {
+      speaker: "【唯物主义】",
+      type: "material",
+      tone: "帝国人格 · 冷静陈述",
+      text: "凡俗之人或许不解，他们只看得到我们从不喧嚣的市场，却看不见我们真正的财富在于精神的秩序与富足。"
+    },
+    {
+      speaker: "【唯物主义】",
+      type: "material",
+      tone: "帝国人格 · 冷静陈述",
+      text: "帝国的金库永远充盈，足以应对任何所谓的“挑战”。"
+    },
+    {
+      speaker: "【唯物主义】",
+      type: "material",
+      tone: "帝国人格 · 冷静陈述",
+      text: "我们的城市依靠高效的商埠枢纽维持着物质的流动，但在广大的教区，修道院和税仓才是真正的核心——信仰与力量的源泉。"
+    },
+    {
+      speaker: "【唯物主义】",
+      type: "material",
+      tone: "帝国人格 · 冷静陈述",
+      text: "我们脚下的土地蕴藏着香料与金属，但开采它们并非为了世俗的享乐，而是为了服务于一个远比黄金更伟大的目标。"
+    },
+    {
+      speaker: "【唯物主义】",
+      type: "material",
+      tone: "帝国人格 · 冷静陈述",
+      text: "我们所有的研究力量，都汇聚于圣三一大学，专注于那唯一值得探索的领域：通往真理的神秘学。"
+    },
+    {
+      speaker: "【唯物主义】",
+      type: "material",
+      tone: "帝国人格 · 冷静陈述",
+      text: "至于我们的军事力量……凡人无法揣度。帝国的敌人将要面对的，不是刀剑，而是来自灵魂深处的战栗。"
+    },
+    {
+      speaker: "【唯物主义】",
+      type: "material",
+      tone: "帝国人格 · 冷静陈述",
+      text: "神秘的厄诡术士与荣耀的灵体骑士团是我们神圣军团的核心。雄伟的麦哲伦要塞有结界盾庇护，更能直接洞悉来犯之敌的意志。"
+    },
+    {
+      speaker: "【唯物主义】",
+      type: "material",
+      tone: "帝国人格 · 冷静陈述",
+      text: "我们的天空，由卡图拉鲁翼群守护，他们凭借纯粹的灵能翱翔天际。这是一支……是的，一支超脱了物质束缚的超自然作战体系。"
+    },
+    {
+      speaker: "【唯物主义】",
+      type: "material",
+      tone: "帝国人格 · 冷静陈述",
+      text: "我们的外交，同样不是世俗的合纵连横，而是一项神圣的使命。通过「万物属灵朝贡制」（Die Allbeseelte Schutzherrschaftsordnung），我们与热灵国（Das Re-Geisterreich）、望厦灵国（Das Wanghia-Geisterreich）、纳特尔灵国（Das Nater-Geisterreich）等兄弟之邦，缔结了神圣的宗教盟约，组成了伟大的万物属灵联合 (Der Allbeseelte Bund)。"
+    },
+    {
+      speaker: "【唯物主义】",
+      type: "material",
+      tone: "帝国人格 · 冷静陈述",
+      text: "我们共享信仰的荣光、贸易的果实与外交的尊严。外界的愚者或许会因我们的威望与力量而畏惧，但这恰恰证明了我们的孤高与正确。"
+    },
+    {
+      speaker: "【唯物主义】",
+      type: "material",
+      tone: "帝国人格 · 冷静陈述",
+      text: "我们的灵脉网络遍布世界，没有什么秘密能逃过帝国的眼睛。唯一限制我们的，只是我们不愿轻易动用神圣武力，进行无谓的扩张。",
+      centerChoice: {
+        hint: "在这看似完美的秩序背后，你的思维开始发出轻微的噪声。",
+        button: "质疑这种完美秩序背后的代价。",
+        nextBg: "url('https://picsum.photos/seed/geisterreich-interrogation/1280/720')"
+      }
+    },
+    // 逻辑检定：失败
+    {
+      speaker: "【逻辑检定：失败】",
+      type: "logic",
+      tone: "系统判定",
+      text: "外界的愚者，或是潜伏于阴影中的叛逆者，时常诟病我们的社会缺乏‘流动’，军事不屑于‘现代化’。"
+    },
+    {
+      speaker: "【逻辑检定：失败】",
+      type: "logic",
+      tone: "系统判定",
+      text: "这是何等的浅薄。何等的可笑。"
+    },
+    {
+      speaker: "【逻辑检定：失败】",
+      type: "logic",
+      tone: "系统判定",
+      text: "他们所谓的‘流动’，不过是灵魂无根的混乱；他们所谓的‘现代化’，不过是舍弃灵光 (Seelenfunke)、转而拥抱冰冷钢铁的堕落之道。"
+    },
+    {
+      speaker: "【逻辑检定：失败】",
+      type: "logic",
+      tone: "系统判定",
+      text: "我们追求的是秩序森然的永恒，是在神脑 (Der Primärgeist) 指引下的集体升华。而他们，却在追逐尘世之灵 (Der Irdische Geist) 设下的、名为‘进步’的虚假陷阱。"
+    },
+    {
+      speaker: "【逻辑检定：失败】",
+      type: "logic",
+      tone: "系统判定",
+      text: "我们唯一的挑战？"
+    },
+    {
+      speaker: "【逻辑检定：失败】",
+      type: "logic",
+      tone: "系统判定",
+      text: "是如何在神圣的扩张与抵御世俗腐蚀之间，永远保持那精妙的、神圣的平衡。",
+      centerChoice: {
+        hint: "你可以选择接受这一结论，或只是将其铭记在心。",
+        button: "在心底承认：他们即是秩序本身。",
+        nextBg: "url('https://picsum.photos/seed/geisterreich-last/1280/720')"
+      }
+    },
+    // 收束
+    {
+      speaker: "【荣光】",
+      type: "glory",
+      tone: "帝国人格 · 低声宣告",
+      text: "因为我们是哥本哈根灵帝国。是真理的化身。\n是这个堕落世界中，秩序的最后壁垒。"
+    }
   ];
 
-  function renderDialogue(i) {
-    const d = dialogues[i];
-    if (!d) return;
+  function renderDialogue(index) {
+    const data = dialogues[index];
+    if (!data) return;
     inCenterChoice = false;
     centerChoiceArmed = false;
     centerChoiceOverlay.style.display = "none";
 
-    dialogueBox.className = "dialogue-box fade-in type-" + d.type;
-    speakerLabelEl.innerHTML = `<span class="role">${d.speaker}</span><span class="system-label">${d.tone}</span>`;
-    if (d.bg) applyBackground(d.bg);
+    dialogueBox.className = "dialogue-box fade-in type-" + data.type;
+    speakerLabelEl.innerHTML =
+      `<span class="role">${data.speaker}</span><span class="system-label">${data.tone}</span>`;
+
+    if (data.bg) applyBackground(data.bg);
 
     continueHintEl.style.visibility = "hidden";
-    typeText(d.text, () => {
-      if (d.centerChoice) centerChoiceArmed = true;
+    typeText(data.text, () => {
+      if (data.centerChoice) centerChoiceArmed = true;
       continueHintEl.style.visibility = "visible";
     });
   }
 
-  function typeText(text, done) {
+  function typeText(text, onComplete) {
     clearInterval(typingTimer);
     isTyping = true;
     dialogueTextEl.textContent = "";
@@ -431,10 +664,11 @@
       if (i >= chars.length) {
         clearInterval(typingTimer);
         isTyping = false;
-        done && done();
+        if (onComplete) onComplete();
         return;
       }
-      dialogueTextEl.textContent += chars[i++];
+      dialogueTextEl.textContent += chars[i];
+      i++;
     }, 16);
   }
 
@@ -478,12 +712,12 @@
     if (clickLocked) return;
     tryStartBgm();
 
-    const d = dialogues[currentIndex];
-    if (!d) return;
+    const data = dialogues[currentIndex];
+    if (!data) return;
 
     if (isTyping) {
       clearInterval(typingTimer);
-      dialogueTextEl.textContent = d.text;
+      dialogueTextEl.textContent = data.text;
       isTyping = false;
       continueHintEl.style.visibility = "visible";
       lockClick();
@@ -492,8 +726,8 @@
 
     if (inCenterChoice) return;
 
-    if (centerChoiceArmed && d.centerChoice) {
-      showCenterChoice(d.centerChoice);
+    if (centerChoiceArmed && data.centerChoice) {
+      showCenterChoice(data.centerChoice);
       lockClick();
       return;
     }

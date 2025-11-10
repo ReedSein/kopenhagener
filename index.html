@@ -164,7 +164,6 @@
       text-align: right;
       visibility: hidden;
     }
-
     .continue-hint::after {
       content: " ▶";
       font-size: 9px;
@@ -287,7 +286,8 @@
 </div>
 
 <script>
-  const switchSound = new Audio("https://interactive-examples.mdn.mozilla.net/media/examples/tom.mp3");
+  // 使用相对路径音频：请确保 ./assets/audio/click.mp3 存在
+  const switchSound = new Audio("./assets/audio/click.mp3");
   switchSound.volume = 0.35;
 
   const initialBg = "url('https://picsum.photos/seed/geisterreich-port/1280/720')";
@@ -306,10 +306,9 @@
   let currentIndex = 0;
   let isTyping = false;
   let typingTimer = null;
-
-  let inCenterChoice = false;     // 是否正在显示中央伪选项
-  let centerChoiceArmed = false;  // 当前条文本已读完，等待点击以弹出伪选项
-  let clickLocked = false;        // 短暂锁定，防止快速多击
+  let inCenterChoice = false;
+  let centerChoiceArmed = false;
+  let clickLocked = false;
 
   function lockClick(ms = 120) {
     clickLocked = true;
@@ -330,8 +329,7 @@
     sceneEl.style.filter = "grayscale(45%)";
   }
 
-  // 剧情：原文不改，只拆段。
-  // centerChoice 添加在：speaker 与下一条不同的地方。
+  // 剧情（原文不改，只拆段；在不同speaker切换点加 centerChoice）
   const dialogues = [
     // 系统 -> 荣光
     {
@@ -391,7 +389,6 @@
       centerChoice: {
         hint: "你的思绪被“那声音”的光辉包裹，另一个观念正等待发言。",
         button: "顺着天命的线索，继续倾听。",
-        // 切到略带冷蓝外交/策略感背景
         nextBg: "url('https://picsum.photos/seed/geisterreich-cabinet/1280/720')"
       }
     },
@@ -551,12 +548,11 @@
       centerChoice: {
         hint: "你可以选择接受这一结论，或只是将其铭记在心。",
         button: "在心底承认：他们即是秩序本身。",
-        // 切回庄严/高空视角，收束
         nextBg: "url('https://picsum.photos/seed/geisterreich-last/1280/720')"
       }
     },
 
-    // 收束（荣光）
+    // 收束
     {
       speaker: "【荣光】",
       type: "glory",
@@ -582,7 +578,7 @@
     continueHintEl.style.visibility = "hidden";
     typeText(data.text, () => {
       if (data.centerChoice) {
-        centerChoiceArmed = true; // 等玩家下一次点击再弹伪选项
+        centerChoiceArmed = true;
       }
       continueHintEl.style.visibility = "visible";
     });
@@ -662,17 +658,17 @@
       return;
     }
 
-    // 2. 若伪选项弹框已显示，底部点击无效
+    // 2. 伪选项已弹出：底部点击无效
     if (inCenterChoice) return;
 
-    // 3. 若当前条有 centerChoice 且已就绪：这次点击只弹出伪选项
+    // 3. 有伪选项且已就绪：本次点击只弹出伪选项
     if (centerChoiceArmed && data.centerChoice) {
       showCenterChoice(data.centerChoice);
       lockClick();
       return;
     }
 
-    // 4. 普通前进
+    // 4. 否则正常进入下一条
     currentIndex++;
     if (currentIndex < dialogues.length) {
       playSwitchSound();

@@ -43,18 +43,24 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* 顶栏：固定四行竖排，不拼一行 */
+    /* 顶栏：四行竖排 + 彩色灯式状态按钮 */
     .top-bar {
       flex: 0 0 auto;
       padding: 6px 10px 4px;
       display: flex;
       flex-direction: column;
       justify-content: flex-start;
-      gap: 3px;
+      gap: 4px;
       font-size: 11px;
       color: #bbbbbb;
       border-bottom: 1px solid #333;
-      background: linear-gradient(to right, #181818, #141414);
+      background: linear-gradient(
+        to right,
+        #181818 0%,
+        #141414 40%,
+        #1a2228 75%,
+        #151515 100%
+      );
       box-sizing: border-box;
     }
 
@@ -71,16 +77,44 @@
     }
 
     .top-line.status {
-      font-size: 10px;
-      color: #cccccc;
+      font-size: 9px;
+      display: inline-flex;
+      align-items: center;
     }
 
-    .top-line.status.strong {
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 1px 6px 2px;
+      border-radius: 3px;
+      border: 1px solid #555;
+      background: rgba(8,8,8,0.96);
+      box-shadow: 0 0 4px rgba(0,0,0,0.9);
+      line-height: 1.3;
+    }
+
+    .status-pill-virtue {
+      border-color: #c79a3b;
       color: #ffd27f;
+      box-shadow:
+        0 0 4px rgba(199,154,59,0.35),
+        inset 0 0 2px rgba(0,0,0,0.8);
     }
 
-    .top-line.status.dim {
-      color: #8aa4c8;
+    .status-pill-anti-progress {
+      border-color: #5b7cbc;
+      color: #9fb8ff;
+      box-shadow:
+        0 0 4px rgba(91,124,188,0.35),
+        inset 0 0 2px rgba(0,0,0,0.8);
+    }
+
+    .status-pill-network {
+      border-color: #4b9f87;
+      color: #a9ffdf;
+      box-shadow:
+        0 0 4px rgba(75,159,135,0.35),
+        inset 0 0 2px rgba(0,0,0,0.8);
     }
 
     /* 场景区域 */
@@ -131,10 +165,7 @@
       box-sizing: border-box;
     }
 
-    .speaker-label .role {
-      margin-right: 6px;
-      font-weight: 600;
-    }
+    .speaker-label .role { margin-right: 6px; font-weight: 600; }
 
     .type-glory .speaker-label {
       border-color: #c79a3b;
@@ -274,11 +305,9 @@
       border-color: #888;
     }
 
-    /* 小屏：保持四行竖排，只是字号略缩 */
+    /* 小屏适配 */
     @media (max-width: 600px) {
-      body {
-        align-items: flex-start;
-      }
+      body { align-items: flex-start; }
       .game-frame {
         margin: 8px;
         height: auto;
@@ -286,17 +315,11 @@
       }
       .top-bar {
         padding: 6px 8px 4px;
-        gap: 2px;
+        gap: 3px;
       }
-      .top-line.title {
-        font-size: 11px;
-      }
-      .top-line.status {
-        font-size: 9px;
-      }
-      .dialogue-box {
-        padding: 8px 8px 6px;
-      }
+      .top-line.title { font-size: 11px; }
+      .top-line.status { font-size: 8.5px; }
+      .dialogue-box { padding: 8px 8px 6px; }
       .dialogue-text {
         font-size: 12px;
         max-height: 40vh;
@@ -305,9 +328,7 @@
         padding: 8px 10px;
         width: 86%;
       }
-      .center-choice-text {
-        font-size: 11px;
-      }
+      .center-choice-text { font-size: 11px; }
       .center-choice-btn {
         font-size: 10px;
         padding: 4px 10px;
@@ -323,12 +344,20 @@
 </head>
 <body>
 <div class="game-frame">
-  <!-- 顶栏：固定四行 -->
+  <!-- 顶栏：四行文字 + 彩色灯按钮 -->
   <div class="top-bar">
-    <div class="top-line title">哥本哈根灵帝国 // Das Kopenhagener Geisterreich</div>
-    <div class="top-line status strong">集权拥护：蒙福时代</div>
-    <div class="top-line status dim">进步主义在我国已经销声匿迹</div>
-    <div class="top-line status">灵脉网络：运行中</div>
+    <div class="top-line title">
+      哥本哈根灵帝国 // Das Kopenhagener Geisterreich
+    </div>
+    <div class="top-line status">
+      <span class="status-pill status-pill-virtue">集权拥护：蒙福时代</span>
+    </div>
+    <div class="top-line status">
+      <span class="status-pill status-pill-anti-progress">进步主义在我国已经销声匿迹</span>
+    </div>
+    <div class="top-line status">
+      <span class="status-pill status-pill-network">灵脉网络：运行中</span>
+    </div>
   </div>
 
   <div class="scene" id="scene">
@@ -408,6 +437,7 @@
     sceneEl.style.filter = "grayscale(45%)";
   }
 
+  // 剧情（原文完整保留，只拆段；伪选项用于切换speaker/背景）
   const dialogues = [
     // 系统 -> 荣光
     {
@@ -745,6 +775,7 @@
 
   resetBtn.addEventListener("click", resetSequence);
 
+  // 初始化
   applyBackground(initialBg);
   renderDialogue(currentIndex);
 </script>
